@@ -1,9 +1,11 @@
-from celery import Celery
+import os
 
+from celery import Celery
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 celery = Celery(
     "otp_tasks",
-    broker="redis://localhost:6379/0",  # where tasks are sent
-    backend="redis://localhost:6379/0"  # where celery stores task results
+    broker=REDIS_URL,  # where tasks are sent
+    backend=REDIS_URL  # where celery stores task results
 )
 # This config sets routing rules
 # It says: tasks with the name "tasks.send_otp_via_sms" should go to the Redis queue named otp_queue.
